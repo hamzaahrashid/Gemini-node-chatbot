@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Gemini</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: black;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+        }
+        .chat-wrapper {
+            position: relative;
+            width: 600px;
+            margin: 50px auto; /* Ensures no cutting from top */
+            text-align: center;
+        }
+        .chat-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h2 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            background: gold;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .loading {
+            display: none;
+            margin-top: 10px;
+            color: white;
+            font-size: 18px;
+        }
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid white;
+            border-top: 3px solid gold;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .response-container {
+            display: none;
+            width: 150%;
+            margin-right: 100%;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            text-align: left;
+            backdrop-filter: blur(5px);
+            border: 2px solid gold;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <canvas id="particleCanvas"></canvas>
+    <canvas id="sunCanvas"></canvas>
+
+    <!-- Chat UI Wrapper (Ensures Proper Positioning) -->
+    <div class="chat-wrapper">
+        <div class="chat-container">
+            <h2>Ask Gemini</h2>
+            <input type="text" id="userInput" placeholder="Ask something...">
+            <button id="sendBtn">Send</button>
+            <p class="loading">Waiting... <span class="spinner"></span></p>
+        </div>
+
+        <!-- Response Box (Now Always Below Search Box) -->
+        <div class="response-container" id="responseContainer">
+            <p id="response"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("sendBtn").addEventListener("click", function() {
+            const userInput = document.getElementById("userInput").value;
+            const loadingText = document.querySelector(".loading");
+            const responseContainer = document.getElementById("responseContainer");
+            const responseText = document.getElementById("response");
+
+            if (!userInput) {
+                alert("Please enter a message!");
+                return;
+            }
+
+            // Show Loading
+            loadingText.style.display = "block";
+            responseContainer.style.display = "none";
+            responseText.innerHTML = ""; // Clear previous response
+
+            fetch("http://localhost:3000/gemini-chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response received:", data);
+                
+                // Hide Loading & Show Response
+                loadingText.style.display = "none";
+                responseContainer.style.display = "block";
+                responseText.innerText = `Gemini: ${data.reply}`;
+
+                // Auto Scroll to Response Without Overlapping Input
+                window.scrollTo({
+                    top: responseContainer.offsetTop - 50,
+                    behavior: "smooth"
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching response:", error);
+                responseText.innerText = "Gemini: No response received.";
+                
+                // Hide Loading & Show Response
+                loadingText.style.display = "none";
+                responseContainer.style.display = "block";
+            });
+        });
+
+        // Starry Night Animation
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+        const sunCanvas = document.getElementById("sunCanvas");
+        const sunCtx = sunCanvas.getContext("2d");
+
+        canvas.width = sunCanvas.width = window.innerWidth;
+        canvas.height = sunCanvas.height = window.innerHeight;
+
+        const particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1 + 0.3;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawSunlight() {
+            sunCtx.clearRect(0, 0, sunCanvas.width, sunCanvas.height);
+            const gradient = sunCtx.createRadialGradient(
+                sunCanvas.width, sunCanvas.height / 2, 50,
+                sunCanvas.width, sunCanvas.height / 2, 400
+            );
+            gradient.addColorStop(0, "rgba(255, 204, 0, 1)");
+            gradient.addColorStop(0.5, "rgba(255, 204, 0, 0.5)");
+            gradient.addColorStop(1, "rgba(255, 204, 0, 0)");
+            sunCtx.fillStyle = gradient;
+            sunCtx.fillRect(0, 0, sunCanvas.width, sunCanvas.height);
+        }
+
+        function init() {
+            for (let i = 0; i < 150; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSunlight();
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
