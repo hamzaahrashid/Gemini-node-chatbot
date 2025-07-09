@@ -48,14 +48,6 @@ Replace YOUR_API_KEY_HERE with your actual Gemini API key. (Your api key you can
 
 node server.js (in cmd move to the directory then write the command)
 
-📸 Screenshots
-
-![s1](https://github.com/user-attachments/assets/a9ff5970-1055-43a4-9295-41ebcab6ea3f)
-
-![s2](https://github.com/user-attachments/assets/83127b67-fb7b-4074-84a5-011183c74104)
-
-![s3](https://github.com/user-attachments/assets/679f5d13-027c-4df5-8404-bf807e0551d1)
-
 📄 License
 This project is for educational and learning purposes.
 
