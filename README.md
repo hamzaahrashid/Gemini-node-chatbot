@@ -35,17 +35,30 @@ This chatbot acts as an interface between users and Google’s Gemini API. Users
 git clone https://github.com/your-username/gemini-chatbot.git
 cd gemini-chatbot
 
-## Step 2:
+2️⃣ Install dependencies
 
 npm install
 
 3️⃣ Set up your environment variables
-
-GEMINI_API_KEY=YOUR_API_KEY_HERE (Your api key you can get it from gemini website as its free)
+Create a .env file in the root directory (gemini-chatbot) folder and add your Gemini API key:
+GEMINI_API_KEY=YOUR_API_KEY_HERE (paste GEMINI_API_KEY=YOUR_API_KEY_HERE in .env file and replace YOUR_API_KEY_HERE with your API key)
+Replace YOUR_API_KEY_HERE with your actual Gemini API key. (Your api key you can get it from gemini website as its free)
 
 4️⃣ Start the server
 
 node server.js (in cmd move to the directory then write the command)
 
+📸 Screenshots
 
+![s1](https://github.com/user-attachments/assets/a9ff5970-1055-43a4-9295-41ebcab6ea3f)
+
+![s2](https://github.com/user-attachments/assets/83127b67-fb7b-4074-84a5-011183c74104)
+
+![s3](https://github.com/user-attachments/assets/679f5d13-027c-4df5-8404-bf807e0551d1)
+
+📄 License
+This project is for educational and learning purposes.
+
+🙌 Author
+Hamza Rashid
 
