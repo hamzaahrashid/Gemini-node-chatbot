@@ -1,2 +1,51 @@
-# Gemini-node-chatbot
-This project is a Node.js-based chatbot that integrates Google’s Gemini API for conversational AI. It serves as a lightweight backend server with an Express framework, providing endpoints for processing user messages and generating AI responses. Designed for easy integration with web frontends or other applications.
+# Gemini Chatbot 🤖✨
+
+A simple AI-powered chatbot built with **Node.js** and the **Google Gemini API**. This project demonstrates how to integrate Gemini’s conversational AI into a custom server using Express, handle user input, and deliver smart, real-time responses.
+
+---
+
+## 📌 Project Overview
+
+This chatbot acts as an interface between users and Google’s Gemini API. Users can send prompts, and the chatbot forwards them to Gemini, then returns the AI-generated reply. It’s a lightweight, extensible project — perfect for learning or expanding into a full web or mobile AI assistant.
+
+---
+
+## ✅ Features
+
+- Uses **Google Gemini API** for advanced conversational responses
+- Simple **Node.js Express** server for handling API requests
+- Easy setup for local development
+- Can be connected to a custom frontend (HTML, React, etc.)
+- Well-organized and beginner-friendly
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Node.js, Express
+- **API:** Gemini AI (Google)
+- **Language:** JavaScript
+
+---
+
+## ⚙️ Installation & Running
+
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/gemini-chatbot.git
+cd gemini-chatbot
+
+## Step 2:
+
+npm install
+
+3️⃣ Set up your environment variables
+
+GEMINI_API_KEY=YOUR_API_KEY_HERE (Your api key you can get it from gemini website as its free)
+
+4️⃣ Start the server
+
+node server.js (in cmd move to the directory then write the command)
+
+
+
